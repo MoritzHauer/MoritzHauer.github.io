@@ -1,0 +1,53 @@
+---
+import '../styles/global.css';
+import { SITE_NAME, SITE_LOCATION, EMAIL, GITHUB, LINKEDIN } from '../lib/site';
+
+const { title, description = 'Personal site.' } = Astro.props;
+const path = Astro.url.pathname;
+// BASE_URL is '/' locally and '/personal-site/' on GitHub Pages. Normalise, then build every
+// internal link from it -- hard-coded '/blog' would 404 under a project-page base path.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const home = `${base}/`;
+const blog = `${base}/blog`;
+const isCurrent = (href) => (href === home ? path === home : path.startsWith(href));
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap"
+    />
+  </head>
+  <body>
+    <header class="site-head">
+      <div class="wrap">
+        <a class="name" href={home}>{SITE_NAME}</a>
+        <nav>
+          <a href={home} aria-current={isCurrent(home) ? 'page' : undefined}>index</a>
+          <a href={blog} aria-current={isCurrent(blog) ? 'page' : undefined}>writing</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <slot />
+    </main>
+
+    <footer class="site-foot">
+      <div class="wrap">
+        <a href={`mailto:${EMAIL}`}>email</a>
+        <a href={GITHUB}>github</a>
+        <a href={LINKEDIN}>linkedin</a>
+        <span class="note">{SITE_LOCATION}</span>
+      </div>
+    </footer>
+  </body>
+</html>

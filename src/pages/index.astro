@@ -1,0 +1,92 @@
+---
+import Base from '../layouts/Base.astro';
+import { getPosts } from '../lib/posts';
+import { SITE_NAME } from '../lib/site';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const posts = (await getPosts()).slice(0, 3);
+
+const fmt = (d) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short' });
+---
+<Base title={SITE_NAME}>
+  <section>
+    <h1>One sentence on what you build.</h1>
+    <p class="lede">
+      A short paragraph on the kind of engineering you do and what you are good at.
+      <strong>Put the specific, concrete part in bold.</strong>
+    </p>
+    <p class="lede">Second paragraph: what you are looking for.</p>
+    <p><span class="status"><i></i> Availability line</span></p>
+  </section>
+
+  <section>
+    <p class="label">Work</p>
+    <div class="role">
+      <div class="when">YYYY &ndash; now</div>
+      <div>
+        <h3>Job Title &middot; Employer</h3>
+        <p>One or two sentences on what the role involves.</p>
+      </div>
+    </div>
+    <div class="role">
+      <div class="when">YYYY &ndash; YYYY</div>
+      <div>
+        <h3>Previous Title &middot; Employer</h3>
+        <p>One or two sentences.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="label">Projects</p>
+    <div class="project">
+      <div class="project-top">
+        <h3>Project Name</h3>
+        <a href="https://example.com">example.com</a>
+      </div>
+      <p style="margin:0.5rem 0 0; color:var(--muted); font-size:0.95rem;">One line on what it is.</p>
+      <ul>
+        <li>Something it does that was hard.</li>
+        <li>Something about how it is built or tested.</li>
+      </ul>
+      <div class="stack">
+        <span>Language</span><span>Framework</span><span>Database</span><span>CI</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="label">Where I want to work</p>
+    <div class="focus">
+      <div><b>First area</b><span>One line on why.</span></div>
+      <div><b>Second area</b><span>One line on why.</span></div>
+      <div><b>Third area</b><span>One line on why.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="label">Contact</p>
+    <p class="lede">City, country. Languages. How you prefer to work.</p>
+    <p>
+      <a href="mailto:you@example.com">you@example.com</a> &middot;
+      <a href="https://github.com/your-handle">github.com/your-handle</a> &middot;
+      <a href="https://www.linkedin.com/in/your-handle/">LinkedIn</a>
+    </p>
+  </section>
+
+  <section>
+    <p class="label">Writing</p>
+    <div class="posts">
+      {posts.map((post) => (
+        <a class="post-link" href={`${base}/blog/${post.id}`}>
+          <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+          <div>
+            <h3>{post.data.title}</h3>
+            <p>{post.data.description}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>
