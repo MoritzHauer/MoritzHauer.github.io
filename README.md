@@ -1,4 +1,4 @@
-# personal-site
+# MoritzHauer.github.io
 
 Personal site and blog. Astro 5, no UI framework, no Tailwind — the CSS is one file.
 
@@ -45,12 +45,11 @@ The URL is the filename: `/blog/my-post`.
 
 `.github/workflows/deploy.yml` builds and deploys on every push to `main`.
 
-1. In the repository settings, set **Pages → Source** to **GitHub Actions**.
-2. In `astro.config.mjs`, set `site` to `https://<your-user>.github.io`.
+This is a **user page**: the repository is named `MoritzHauer.github.io`, so the site is served
+at `https://MoritzHauer.github.io` with no base path. Nothing else needs configuring in
+`astro.config.mjs`.
 
-This is configured as a **project page**, served at `https://<your-user>.github.io/personal-site`,
-so `base` is set to `/personal-site`. Internal links are built from `import.meta.env.BASE_URL`,
-so they follow the base automatically — do not hard-code `/blog`.
+One-time setup in the repository: **Settings → Pages → Source → GitHub Actions**.
 
-For a **user page** at `https://<your-user>.github.io` instead, rename the repository to
-`<your-user>.github.io` and remove the `base` line.
+Internal links are built from `import.meta.env.BASE_URL` rather than hard-coded, so moving this
+to a project page later only means adding `base: '/<repo-name>'` to `astro.config.mjs`.
