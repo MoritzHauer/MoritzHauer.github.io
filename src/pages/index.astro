@@ -1,92 +1,149 @@
 ---
 import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Timeline from '../components/Timeline.astro';
 import { getPosts } from '../lib/posts';
-import { SITE_NAME } from '../lib/site';
+import { PROFILE } from '../data/profile';
+import { EXPERIENCE, STACK, CV, CERTS } from '../data/cv';
+import { publicFile } from '../lib/public';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-
+const cvFiles = CV.map((c) => ({ ...c, href: publicFile(`cv/${c.file}`) })).filter((c) => c.href);
+const certs = [...CERTS].sort((a, b) => b.date - a.date).map((c) => ({ ...c, href: publicFile(c.file && `certificates/${c.file}`) }));
 const posts = (await getPosts()).slice(0, 3);
-
 const fmt = (d) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short' });
+const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
 ---
-<Base title={SITE_NAME}>
-  <section>
-    <h1>One sentence on what you build.</h1>
-    <p class="lede">
-      A short paragraph on the kind of engineering you do and what you are good at.
-      <strong>Put the specific, concrete part in bold.</strong>
-    </p>
-    <p class="lede">Second paragraph: what you are looking for.</p>
-    <p><span class="status"><i></i> Availability line</span></p>
+<Base title={PROFILE.name}>
+  <section class="hero">
+    <h1>{PROFILE.hero.title}</h1>
+    <p class="lede">{PROFILE.hero.intro} <strong>{PROFILE.hero.highlight}</strong></p>
+    <p><span class="status"><i></i> {PROFILE.status}</span></p>
+  </section>
+
+  <section class="path" aria-label="Career path">
+    <Timeline />
   </section>
 
   <section>
-    <p class="label">Work</p>
-    <div class="role">
-      <div class="when">YYYY &ndash; now</div>
-      <div>
-        <h3>Job Title &middot; Employer</h3>
-        <p>One or two sentences on what the role involves.</p>
-      </div>
-    </div>
-    <div class="role">
-      <div class="when">YYYY &ndash; YYYY</div>
-      <div>
-        <h3>Previous Title &middot; Employer</h3>
-        <p>One or two sentences.</p>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <p class="label">Projects</p>
-    <div class="project">
-      <div class="project-top">
-        <h3>Project Name</h3>
-        <a href="https://example.com">example.com</a>
-      </div>
-      <p style="margin:0.5rem 0 0; color:var(--muted); font-size:0.95rem;">One line on what it is.</p>
-      <ul>
-        <li>Something it does that was hard.</li>
-        <li>Something about how it is built or tested.</li>
-      </ul>
-      <div class="stack">
-        <span>Language</span><span>Framework</span><span>Database</span><span>CI</span>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <p class="label">Where I want to work</p>
-    <div class="focus">
-      <div><b>First area</b><span>One line on why.</span></div>
-      <div><b>Second area</b><span>One line on why.</span></div>
-      <div><b>Third area</b><span>One line on why.</span></div>
-    </div>
-  </section>
-
-  <section>
-    <p class="label">Contact</p>
-    <p class="lede">City, country. Languages. How you prefer to work.</p>
-    <p>
-      <a href="mailto:you@example.com">you@example.com</a> &middot;
-      <a href="https://github.com/your-handle">github.com/your-handle</a> &middot;
-      <a href="https://www.linkedin.com/in/your-handle/">LinkedIn</a>
-    </p>
-  </section>
-
-  <section>
-    <p class="label">Writing</p>
-    <div class="posts">
-      {posts.map((post) => (
-        <a class="post-link" href={`${base}/blog/${post.id}`}>
-          <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+    <p class="label">Experience</p>
+    <ol class="jobs">
+      {EXPERIENCE.map((job) => (
+        <li class="job">
+          {job.logo ? <img class="job-logo" src={`${base}/logos/${job.logo}`} alt="" width="40" height="40" loading="lazy" /> : <span></span>}
           <div>
-            <h3>{post.data.title}</h3>
-            <p>{post.data.description}</p>
+            <div class="job-top">
+              <h3>{job.role} <span>· {job.org}</span></h3>
+              <span class="job-when">{job.when} · {job.place}</span>
+            </div>
+            <ul>{job.points.map((point) => <li>{point}</li>)}</ul>
+            <div class="stack">{job.stack.map((tech) => <span>{tech}</span>)}</div>
           </div>
-        </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  {PROFILE.projects.length > 0 && (
+    <section>
+      <p class="label">Projects</p>
+      {PROFILE.projects.map((p) => (
+        <div class="project">
+          {p.image && <img class="project-img" src={`${base}/logos/${p.image}`} alt={p.imageAlt} width="72" height="72" />}
+          <div>
+            <div class="project-top">
+              <h3>{p.name}</h3>
+              {p.url && <a href={p.url}>{bare(p.url)}</a>}
+            </div>
+            <p class="project-summary">{p.summary}</p>
+            <ul>{p.points.map((point) => <li>{point}</li>)}</ul>
+            <div class="stack">{p.stack.map((tech) => <span>{tech}</span>)}</div>
+          </div>
+        </div>
+      ))}
+    </section>
+  )}
+
+  <section>
+    <p class="label">Tech stack</p>
+    <div class="tech">
+      {STACK.map((g) => (
+        <div class="tech-group">
+          <h3>{g.group}</h3>
+          <ul>
+            {g.items.map((t) => (
+              <li>
+                {t.icon && <i style={`--src: url(${base}/logos/tech/${t.icon}.svg)`} aria-hidden="true"></i>}
+                {t.name}
+              </li>
+            ))}
+          </ul>
+        </div>
       ))}
     </div>
   </section>
+
+  {cvFiles.length > 0 && (
+    <section>
+      <p class="label">CV</p>
+      <p class="cv-links">
+        {cvFiles.map((c) => (
+          <a class="cv-link" href={c.href} hreflang={c.lang} lang={c.lang}><Icon name="post" />{c.label} <small>PDF</small></a>
+        ))}
+      </p>
+    </section>
+  )}
+
+  {certs.length > 0 && (
+    <section>
+      <p class="label">Certificates</p>
+      <ul class="certs">
+        {certs.map((c) => (
+          <li>
+            <span class="cert-icon"><Icon name="cert" class="" /></span>
+            <div>
+              <h3>{c.href ? <a href={c.href}>{c.title} <small>PDF</small></a> : c.title}</h3>
+              <span>{c.org} · {c.when}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <section>
+    <p class="label">Contact</p>
+    <p class="lede">{PROFILE.contact}</p>
+    <form class="contact-form">
+      <div class="field"><label for="cf-name">Name</label><input id="cf-name" name="name" autocomplete="name" required /></div>
+      <div class="field"><label for="cf-email">Your email</label><input id="cf-email" name="email" type="email" autocomplete="email" required /></div>
+      <div class="field wide"><label for="cf-message">Message</label><textarea id="cf-message" name="message" rows="5" required></textarea></div>
+      <div class="form-foot wide">
+        {/* ponytail: no receiving address yet. Add the form `action` and remove `disabled` once it exists. */}
+        <button type="submit" disabled>Send message</button>
+        <span class="form-note">Sending is switched off for now. Until then, reach me on <a href={PROFILE.linkedin}>LinkedIn</a>.</span>
+      </div>
+    </form>
+    <p>
+      <a href={PROFILE.github}><Icon name="github" />{bare(PROFILE.github)}</a> &middot;
+      <a href={PROFILE.linkedin}><Icon name="linkedin" />LinkedIn</a>
+    </p>
+  </section>
+
+  {posts.length > 0 && (
+    <section>
+      <p class="label">Blog</p>
+      <div class="posts">
+        {posts.map((post) => (
+          <a class="post-link" href={`${base}/blog/${post.id}`}>
+            <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+            <div>
+              <h3>{post.data.title}</h3>
+              <p>{post.data.description}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
 </Base>

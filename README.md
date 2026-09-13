@@ -8,13 +8,31 @@ npm run dev      # http://localhost:4321
 npm run build    # -> dist/
 ```
 
+## Content and logic
+
+Personal content is kept apart from the site logic. To make the site yours, edit only these:
+
+| Path | What |
+|---|---|
+| `src/data/profile.ts` | Name, links, intro text, contact text, projects. |
+| `src/data/timeline.ts` | Career steps, side projects, topic icons for posts. |
+| `src/data/cv.ts` | Experience entries, tech stack, CV download list, certificates (also drawn on the timeline, behind their own legend switch). |
+| `src/blog/*.md` | Blog posts. |
+| `public/logos/` | Logos and images referenced by the data files; `tech/` holds the stack icons ([simple-icons](https://simpleicons.org), CC0). |
+| `public/cv/` | CV PDFs. A download button appears only for files listed in `cv.ts` that exist here. |
+| `public/certificates/` | Certificate PDFs. A certificate links to its PDF only once the file exists here. |
+
+Everything else, including `public/theme/`, is logic and design.
+
 ## Structure
 
 | Path | What |
 |---|---|
-| `src/styles/global.css` | The entire design system. Tokens at the top; change colours there. |
-| `src/layouts/Base.astro` | Head, header, footer. Every page uses it. |
-| `src/pages/index.astro` | Home: intro, work, projects, focus, contact, latest three posts. |
+| `src/styles/global.css` | The entire design system. One token block per theme (nature, river, `</dev>`) at the top. |
+| `src/layouts/Base.astro` | Head, header with the theme switch, footer. Every page uses it. |
+| `src/pages/index.astro` | Home: intro, path timeline, projects, contact, latest three posts. |
+| `src/components/Timeline.astro` | The path timeline: road, scenery, point spacing, label placement, previews. |
+| `src/components/Icon.astro` | Inline SVG icons. |
 | `src/pages/blog/` | Blog index and post template. |
 | `src/blog/*.md` | Posts. Add a file, it appears — no registration step. |
 | `src/content.config.ts` | Frontmatter schema. A post missing a field fails the build, on purpose. |

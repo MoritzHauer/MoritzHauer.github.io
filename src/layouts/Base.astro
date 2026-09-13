@@ -1,39 +1,52 @@
 ---
 import '../styles/global.css';
-import { SITE_NAME, SITE_LOCATION, EMAIL, GITHUB, LINKEDIN } from '../lib/site';
+import Icon from '../components/Icon.astro';
+import { PROFILE } from '../data/profile';
 
-const { title, description = 'Personal site.' } = Astro.props;
+const { title, description = PROFILE.description } = Astro.props;
 const path = Astro.url.pathname;
-// BASE_URL is '/' locally and '/personal-site/' on GitHub Pages. Normalise, then build every
-// internal link from it -- hard-coded '/blog' would 404 under a project-page base path.
+// Build every internal link from BASE_URL, so a project-page base path would still work.
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const home = `${base}/`;
 const blog = `${base}/blog`;
 const isCurrent = (href) => (href === home ? path === home : path.startsWith(href));
+const LOOKS = [['nature', 'Nature', 'mountain'], ['river', 'River', 'waves'], ['dev', '</dev>', 'chip']];
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" data-look="nature">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={new URL(path, Astro.site)} />
+    <script is:inline>
+      // Apply the saved theme before first paint, so the page never flashes the default one.
+      try {
+        const look = localStorage.getItem('look');
+        if (['nature', 'river', 'dev'].includes(look)) document.documentElement.dataset.look = look;
+      } catch {}
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito+Sans:wght@400;600;700&family=Chakra+Petch:wght@500;600&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
     />
   </head>
   <body>
     <header class="site-head">
       <div class="wrap">
-        <a class="name" href={home}>{SITE_NAME}</a>
+        <a class="name" href={home}>{PROFILE.name}</a>
         <nav>
           <a href={home} aria-current={isCurrent(home) ? 'page' : undefined}>index</a>
-          <a href={blog} aria-current={isCurrent(blog) ? 'page' : undefined}>writing</a>
+          <a href={blog} aria-current={isCurrent(blog) ? 'page' : undefined}>blog</a>
         </nav>
+        <div class="looks" role="radiogroup" aria-label="Theme">
+          {LOOKS.map(([key, label, icon]) => (
+            <label title={label}><input type="radio" name="look" value={key} /><Icon name={icon} class="" /><span>{label}</span></label>
+          ))}
+        </div>
       </div>
     </header>
 
@@ -43,11 +56,23 @@ const isCurrent = (href) => (href === home ? path === home : path.startsWith(hre
 
     <footer class="site-foot">
       <div class="wrap">
-        <a href={`mailto:${EMAIL}`}>email</a>
-        <a href={GITHUB}>github</a>
-        <a href={LINKEDIN}>linkedin</a>
-        <span class="note">{SITE_LOCATION}</span>
+        <a href={PROFILE.github}><Icon name="github" />github</a>
+        <a href={PROFILE.linkedin}><Icon name="linkedin" />linkedin</a>
+        <span class="note">{PROFILE.location}</span>
       </div>
     </footer>
+
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        document.querySelectorAll('.looks input').forEach((input) => {
+          input.checked = input.value === root.dataset.look;
+          input.addEventListener('change', () => {
+            root.dataset.look = input.value;
+            try { localStorage.setItem('look', input.value); } catch {}
+          });
+        });
+      })();
+    </script>
   </body>
 </html>
