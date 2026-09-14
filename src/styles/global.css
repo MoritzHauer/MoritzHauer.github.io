@@ -212,6 +212,8 @@ section:first-of-type { border-top: 0; padding-top: 0; }
 
 /* ---------- post list ---------- */
 .posts { display: flex; flex-direction: column; }
+.switch + .posts { margin-top: 1rem; }
+body:has(#show-personal:not(:checked)) .post-link[data-kind='personal'] { display: none; }
 .post-link { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1.25rem; padding: 1rem 0; border-bottom: 1px solid var(--rule-2); text-decoration: none; color: inherit; }
 .post-link:hover h3 { color: var(--link); }
 .post-link time { font-family: var(--f-mono); font-size: 0.82rem; color: var(--faint); font-variant-numeric: tabular-nums; padding-top: 0.2rem; }
@@ -226,7 +228,9 @@ section:first-of-type { border-top: 0; padding-top: 0; }
 .prose h2 { font-size: 1.3rem; margin: 2rem 0 0.6rem; }
 .prose blockquote { margin: 1.5rem 0; padding-left: 1.1rem; border-left: 2px solid var(--rule); color: var(--muted); font-style: italic; }
 .prose code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.88em; background: var(--rule-2); padding: 0.1em 0.35em; border-radius: 2px; }
-.prose img { max-width: 100%; height: auto; }
+.prose img, .prose svg { max-width: 100%; height: auto; }
+.prose figure { margin: 1.5rem 0; }
+.prose figcaption { margin-top: 0.4rem; font-size: 0.88rem; color: var(--muted); }
 
 /* ---------- path timeline ---------- */
 /* Full viewport width; the script keeps labels inside a column 40px from each edge (max 1320px). */
@@ -259,7 +263,7 @@ section.path { padding-top: 0; border-top: 0; }
 
 .overlay { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
 .overlay > * { position: absolute; pointer-events: auto; }
-.hide-extras .extra, .hide-certs .cert { display: none !important; }
+.hide-extras .extra, .hide-certs .cert, .hide-personal .personal { display: none !important; }
 
 .node { width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; background: var(--node-fill); border: 5px solid var(--c); box-shadow: 0 0 0 2px #FFFFFF, 0 1px 3px rgba(0, 0, 0, 0.3); }
 :root[data-look='river'] .node { width: 24px; height: 18px; margin: -9px 0 0 -12px; border: 3px solid #FFFFFF; border-radius: 50% 45% 50% 40%; box-shadow: 0 0 0 2px var(--c), 0 2px 4px rgba(58, 38, 22, 0.25); }

@@ -10,7 +10,7 @@ import { publicFile } from '../lib/public';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const cvFiles = CV.map((c) => ({ ...c, href: publicFile(`cv/${c.file}`) })).filter((c) => c.href);
 const certs = [...CERTS].sort((a, b) => b.date - a.date).map((c) => ({ ...c, href: publicFile(c.file && `certificates/${c.file}`) }));
-const posts = (await getPosts()).slice(0, 3);
+const posts = (await getPosts()).filter((post) => post.data.kind === 'engineering').slice(0, 3);
 const fmt = (d) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short' });
 const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
 ---

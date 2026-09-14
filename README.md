@@ -36,9 +36,12 @@ Everything else, including `public/theme/`, is logic and design.
 | `src/pages/blog/` | Blog index and post template. |
 | `src/blog/*.md` | Posts. Add a file, it appears — no registration step. |
 | `src/content.config.ts` | Frontmatter schema. A post missing a field fails the build, on purpose. |
-| `src/lib/posts.ts` | Draft filtering, shared by every page that lists posts. |
+| `src/lib/posts.ts` | Draft filtering, shared by every page that lists posts. Also `happenedAt`, which turns `happened` into a timeline year and a display label. |
 
 ## Adding a post
+
+How posts are written: [`docs/blog-style.md`](docs/blog-style.md). With Claude Code, `/blog-post`
+interviews you and drafts from your answers.
 
 Create `src/blog/my-post.md`:
 
@@ -49,10 +52,17 @@ date: 2026-09-01
 description: "One sentence — shown in the list and as the meta description."
 tags: ["optional"]
 draft: false
+kind: engineering        # or personal: hidden by default behind a switch
+# happened: 2019-06        # optional: when it took place; places the post on the timeline
 ---
 
 Body in markdown.
 ```
+
+`date` is the publish date and drives sorting and listing everywhere. `happened` (optional) is
+when the post's subject actually took place, and only affects where it lands on the path
+timeline. Personal posts never appear in the home page's latest posts, and are hidden by default
+behind a "Personal posts" switch on `/blog` and on the timeline.
 
 The URL is the filename: `/blog/my-post`.
 

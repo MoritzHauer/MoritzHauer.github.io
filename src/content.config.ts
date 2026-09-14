@@ -10,6 +10,10 @@ const blog = defineCollection({
     tags: z.array(z.string()).default([]),
     // Defaults to true: a post ships only when you explicitly set draft: false.
     draft: z.boolean().default(true),
+    // Engineering posts are the default feed; personal posts are hidden behind a switch.
+    kind: z.enum(['engineering', 'personal']),
+    // When the subject took place, if not the publish date: 'YYYY' or 'YYYY-MM'. Places the post on the timeline.
+    happened: z.preprocess((v) => (typeof v === 'number' ? String(v) : v), z.string().regex(/^\d{4}(-(0[1-9]|1[0-2]))?$/)).optional(),
   }),
 });
 

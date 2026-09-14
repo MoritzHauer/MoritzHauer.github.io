@@ -1,5 +1,5 @@
 ---
-import { getPosts } from '../lib/posts';
+import { getPosts, happenedAt } from '../lib/posts';
 import Icon from './Icon.astro';
 import { STEPS as CONTENT_STEPS, NEXT, SIDE, TOPICS as CONTENT_TOPICS } from '../data/timeline';
 import { CERTS } from '../data/cv';
@@ -21,13 +21,14 @@ const TOPICS = { ...CONTENT_TOPICS, post: { color: '#6B7280', icon: 'post' } };
 const yearOf = (d) => d.getUTCFullYear() + d.getUTCMonth() / 12;
 const month = (d) => d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
 const posts = (await getPosts()).map((p) => ({
-  date: yearOf(p.data.date),
-  kind: `Blog post · ${month(p.data.date)}`,
+  date: p.data.happened ? happenedAt(p.data.happened).year : yearOf(p.data.date),
+  kind: p.data.happened ? `Blog post · about ${happenedAt(p.data.happened).label}` : `Blog post · ${month(p.data.date)}`,
   title: p.data.title,
   desc: p.data.description,
   topic: p.data.tags.find((t) => t in TOPICS) ?? 'post',
   href: `${base}/blog/${p.id}`,
   cta: 'Read the post',
+  personal: p.data.kind === 'personal',
 }));
 const extras = [...SIDE, ...posts].sort((a, b) => a.date - b.date);
 ---
@@ -80,7 +81,7 @@ const extras = [...SIDE, ...posts].sort((a, b) => a.date - b.date);
         {extras.map((e) => {
           const t = TOPICS[e.topic] ?? TOPICS.post;
           return (
-            <a class={`ticon marker extra${t.photo ? ' photo' : ''}`} style={`--t:${t.color}`} data-date={e.date}
+            <a class={`ticon marker extra${t.photo ? ' photo' : ''}${e.personal ? ' personal' : ''}`} style={`--t:${t.color}`} data-date={e.date}
               href={e.href} target={e.href.startsWith('http') ? '_blank' : undefined} rel="noopener"
               data-kind={e.kind} data-title={e.title} data-desc={e.desc} data-cta={e.cta} aria-label={e.title} aria-describedby="tl-pop">
               {t.img ? <img src={logo(t.img)} alt="" /> : <Icon name={t.icon} class="" />}
@@ -95,6 +96,7 @@ const extras = [...SIDE, ...posts].sort((a, b) => a.date - b.date);
 
   <div class="tl-legend">
     <label class="switch"><input type="checkbox" role="switch" data-hides="extras" /><span class="track"></span>Blog &amp; side projects</label>
+    {posts.some((p) => p.personal) && <label class="switch"><input type="checkbox" role="switch" data-hides="personal" /><span class="track"></span>Personal posts</label>}
     {CERTS.length > 0 && <label class="switch"><input type="checkbox" role="switch" data-hides="certs" checked /><span class="track"></span>Certificates</label>}
     <span class="key"><i class="k-step"></i>Career step</span>
     <span class="key extra"><i class="k-post"></i>Post or project, hover to preview</span>
@@ -337,7 +339,9 @@ const extras = [...SIDE, ...posts].sort((a, b) => a.date - b.date);
       const today = new Date();
       const dates = [...shownSteps().map(([n]) => Number(n.dataset.date)), today.getFullYear() + today.getMonth() / 12];
       const gaps = new Map();
-      for (const m of markers) {
+      // Hidden personal posts take no space and don't count toward cluster badges.
+      const visible = markers.filter((m) => !(m.classList.contains('personal') && tl.classList.contains('hide-personal')));
+      for (const m of visible) {
         let k = dates.findIndex((d) => Number(m.dataset.date) < d);
         if (k === -1) k = dates.length - 1;
         if (!gaps.has(k)) gaps.set(k, []);
