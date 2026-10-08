@@ -29,10 +29,10 @@ export const PROFILE = {
       summary: 'A spaced-repetition learning platform, designed, built and shipped on my own.',
       points: [
         'Offline-capable progressive web app: once a book is downloaded it works without a connection.',
-        'User accounts and data access on a Supabase/PostgreSQL backend.',
+        'User accounts and data access on a PostgreSQL backend.',
         'Automated tests, CI/CD, and architecture decisions written down in the repository rather than kept in my head.',
       ],
-      stack: ['TypeScript', 'React', 'PWA', 'Supabase', 'PostgreSQL', 'Vitest', 'GitHub Actions'],
+      stack: ['TypeScript', 'React', 'PWA', 'PostgreSQL', 'Vitest', 'GitHub Actions'],
     },
   ],
 };

@@ -36,26 +36,27 @@ export const EXPERIENCE = [
   },
 ];
 
-// `icon` is a simple-icons slug with a file in public/logos/tech/ (https://simpleicons.org, CC0).
+// `icon` is a file in public/logos/tech/: a simple-icons slug (https://simpleicons.org, CC0) or a hand-drawn line icon.
 // Without `icon` the item shows as text only.
 export const STACK = [
   { group: 'Languages', items: [
     { name: 'C++', icon: 'cplusplus' }, { name: 'C', icon: 'c' }, { name: 'Python', icon: 'python' },
-    { name: 'TypeScript', icon: 'typescript' }, { name: 'C#' },
+    { name: 'TypeScript', icon: 'typescript' }, { name: 'C#', icon: 'csharp' },
   ] },
   { group: 'Web and data', items: [
-    { name: 'React', icon: 'react' }, { name: 'Node.js', icon: 'nodedotjs' }, { name: 'FastAPI', icon: 'fastapi' },
-    { name: 'PostgreSQL', icon: 'postgresql' }, { name: 'Supabase', icon: 'supabase' }, { name: 'PWA', icon: 'pwa' },
+    { name: 'React', icon: 'react' }, { name: 'Node.js', icon: 'nodedotjs' },
+    { name: 'PostgreSQL', icon: 'postgresql' }, { name: 'PWA', icon: 'pwa' },
   ] },
   { group: 'Testing and delivery', items: [
-    { name: 'pytest', icon: 'pytest' }, { name: 'Vitest', icon: 'vitest' }, { name: 'GitHub Actions', icon: 'githubactions' },
+    { name: 'GitHub Actions', icon: 'githubactions' },
     { name: 'Docker', icon: 'docker' }, { name: 'Linux', icon: 'linux' }, { name: 'Git', icon: 'git' },
   ] },
   { group: 'AI-assisted development', items: [
     { name: 'Claude Code', icon: 'claude' }, { name: 'GitHub Copilot', icon: 'githubcopilot' },
   ] },
   { group: 'Focus', items: [
-    { name: 'Digital twins' }, { name: 'Simulation' }, { name: 'Hardware-in-the-loop' }, { name: 'Industrial control' }, { name: 'Software architecture' },
+    { name: 'Digital twins', icon: 'digitaltwin' }, { name: 'Simulation', icon: 'simulation' },
+    { name: 'Hardware-in-the-loop', icon: 'hil' }, { name: 'Software architecture', icon: 'architecture' },
   ] },
 ];
 
