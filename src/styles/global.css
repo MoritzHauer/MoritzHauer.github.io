@@ -263,7 +263,7 @@ section.path { padding-top: 0; border-top: 0; }
 
 .overlay { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
 .overlay > * { position: absolute; pointer-events: auto; }
-.hide-extras .extra, .hide-certs .cert, .hide-personal .personal { display: none !important; }
+.hide-extras .extra, .hide-certs .cert { display: none !important; }
 
 .node { width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; background: var(--node-fill); border: 5px solid var(--c); box-shadow: 0 0 0 2px #FFFFFF, 0 1px 3px rgba(0, 0, 0, 0.3); }
 :root[data-look='river'] .node { width: 24px; height: 18px; margin: -9px 0 0 -12px; border: 3px solid #FFFFFF; border-radius: 50% 45% 50% 40%; box-shadow: 0 0 0 2px var(--c), 0 2px 4px rgba(58, 38, 22, 0.25); }
