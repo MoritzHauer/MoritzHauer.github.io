@@ -60,6 +60,9 @@ export const STACK = [
   ] },
 ];
 
+// Icons for Experience and Projects tags that are not in STACK; tags in STACK reuse its icon.
+export const TAG_ICONS = { FastAPI: 'fastapi', pandas: 'pandas', VHDL: 'vhdl', Vitest: 'vitest' };
+
 // Certificates. They also appear as steps on the timeline, behind their own legend switch.
 // `date` is a decimal year like in timeline.ts. `file` is a PDF in public/certificates/; without one the entry is not linked.
 export const CERTS = [

@@ -4,7 +4,7 @@ import Icon from '../components/Icon.astro';
 import Timeline from '../components/Timeline.astro';
 import { getPosts } from '../lib/posts';
 import { PROFILE } from '../data/profile';
-import { EXPERIENCE, STACK, CV, CERTS } from '../data/cv';
+import { EXPERIENCE, STACK, CV, CERTS, TAG_ICONS } from '../data/cv';
 import { publicFile } from '../lib/public';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -12,6 +12,7 @@ const cvFiles = CV.map((c) => ({ ...c, href: publicFile(`cv/${c.file}`) })).filt
 const certs = [...CERTS].sort((a, b) => b.date - a.date).map((c) => ({ ...c, href: publicFile(c.file && `certificates/${c.file}`) }));
 const posts = (await getPosts()).filter((post) => post.data.kind === 'engineering').slice(0, 3);
 const fmt = (d) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short' });
+const tagIcons = { ...TAG_ICONS, ...Object.fromEntries(STACK.flatMap((g) => g.items).map((t) => [t.name, t.icon])) };
 const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
 ---
 <Base title={PROFILE.name}>
@@ -37,7 +38,7 @@ const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
               <span class="job-when">{job.when} · {job.place}</span>
             </div>
             <ul>{job.points.map((point) => <li>{point}</li>)}</ul>
-            <div class="stack">{job.stack.map((tech) => <span>{tech}</span>)}</div>
+            <div class="stack">{job.stack.map((tech) => <span>{tagIcons[tech] && <i style={`--src: url(${base}/logos/tech/${tagIcons[tech]}.svg)`} aria-hidden="true"></i>}{tech}</span>)}</div>
           </div>
         </li>
       ))}
@@ -57,7 +58,7 @@ const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
             </div>
             <p class="project-summary">{p.summary}</p>
             <ul>{p.points.map((point) => <li>{point}</li>)}</ul>
-            <div class="stack">{p.stack.map((tech) => <span>{tech}</span>)}</div>
+            <div class="stack">{p.stack.map((tech) => <span>{tagIcons[tech] && <i style={`--src: url(${base}/logos/tech/${tagIcons[tech]}.svg)`} aria-hidden="true"></i>}{tech}</span>)}</div>
           </div>
         </div>
       ))}
@@ -146,4 +147,5 @@ const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
       </div>
     </section>
   )}
+
 </Base>

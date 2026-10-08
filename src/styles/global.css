@@ -162,7 +162,7 @@ section:first-of-type { border-top: 0; padding-top: 0; }
 .project ul { margin: 0.9rem 0 1.1rem; padding-left: 1.1rem; color: var(--muted); font-size: 0.95rem; }
 .project li { margin-bottom: 0.35rem; }
 .stack { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-.stack span { font-family: var(--f-mono); font-size: 0.74rem; color: var(--muted); border: 1px solid var(--rule); border-radius: var(--radius); padding: 0.1rem 0.45rem; }
+.stack span { display: inline-flex; align-items: center; gap: 0.3rem; font-family: var(--f-mono); font-size: 0.74rem; color: var(--muted); border: 1px solid var(--rule); border-radius: var(--radius); padding: 0.1rem 0.45rem; }
 :root[data-look='dev'] .project {
   background:
     linear-gradient(var(--accent), var(--accent)) left top / 16px 2px no-repeat,
@@ -192,6 +192,7 @@ section:first-of-type { border-top: 0; padding-top: 0; }
 .tech-group ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .tech-group li { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; padding: 0.25rem 0.6rem; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); }
 .tech-group i { width: 16px; height: 16px; flex: none; background: var(--ink); -webkit-mask: var(--src) center / contain no-repeat; mask: var(--src) center / contain no-repeat; }
+.stack i { width: 12px; height: 12px; flex: none; background: currentColor; -webkit-mask: var(--src) center / contain no-repeat; mask: var(--src) center / contain no-repeat; }
 
 /* ---------- CV ---------- */
 .cv-links { display: flex; flex-wrap: wrap; gap: 0.75rem; }
