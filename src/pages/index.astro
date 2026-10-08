@@ -89,7 +89,7 @@ const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
       <p class="label">CV</p>
       <p class="cv-links">
         {cvFiles.map((c) => (
-          <a class="cv-link" href={c.href} hreflang={c.lang} lang={c.lang}><Icon name="post" />{c.label} <small>PDF</small></a>
+          <a class="cv-link" href={c.href} data-title={`CV · ${c.label}`} hreflang={c.lang} lang={c.lang}><Icon name="post" />{c.label} <small>PDF</small></a>
         ))}
       </p>
     </section>
@@ -148,4 +148,26 @@ const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
     </section>
   )}
 
+  {/* PDF preview for the CV and certificate links. Without a built-in PDF viewer (most phones) the links just open the file. */}
+  <dialog class="pdf-view" aria-label="PDF preview">
+    <form method="dialog"><button class="pdf-close" aria-label="Close">&times;</button></form>
+    <iframe title="PDF preview"></iframe>
+  </dialog>
+  <script is:inline>
+    (() => {
+      const dlg = document.querySelector('.pdf-view');
+      const frame = dlg.querySelector('iframe');
+      document.addEventListener('click', (e) => {
+        const a = e.target.closest('a[href$=".pdf"]');
+        if (!a || e.defaultPrevented || !navigator.pdfViewerEnabled || e.button || e.ctrlKey || e.metaKey || e.shiftKey) return;
+        e.preventDefault();
+        dlg.setAttribute('aria-label', a.dataset.title ?? a.textContent.replace(/\s*PDF\s*$/, '').trim());
+        // Hides the viewer's toolbar and sidebar in Chrome, Edge and Safari; Firefox ignores it.
+        frame.src = `${a.href}#toolbar=0&navpanes=0`;
+        dlg.showModal();
+      });
+      dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+      dlg.addEventListener('close', () => { frame.src = 'about:blank'; });
+    })();
+  </script>
 </Base>

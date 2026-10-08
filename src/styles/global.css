@@ -208,6 +208,15 @@ section:first-of-type { border-top: 0; padding-top: 0; }
 .certs h3 small { font-family: var(--f-mono); font-size: 0.7rem; font-weight: 400; }
 .certs span { font-size: 0.8rem; color: var(--muted); }
 
+/* ---------- pdf preview ---------- */
+.pdf-view { width: min(60rem, 100vw - 2rem); height: min(90vh, 100dvh - 2rem); padding: 0; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); color: var(--ink); }
+.pdf-view[open] { display: flex; flex-direction: column; }
+.pdf-view::backdrop { background: rgba(0, 0, 0, 0.55); }
+.pdf-view form { position: absolute; top: 0.75rem; right: 1.5rem; margin: 0; }
+.pdf-close { width: 2.25rem; height: 2.25rem; padding: 0; border: 0; border-radius: 50%; font-size: 1.5rem; line-height: 1; background: rgba(0, 0, 0, 0.6); color: #FFFFFF; cursor: pointer; }
+.pdf-close:hover { background: rgba(0, 0, 0, 0.8); }
+.pdf-view iframe { flex: 1; width: 100%; border: 0; background: #FFFFFF; }
+
 /* ---------- icons ---------- */
 .icon { width: 1em; height: 1em; vertical-align: -0.125em; margin-right: 0.35em; }
 
