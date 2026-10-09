@@ -27,4 +27,5 @@ export const TOPICS = {
   foraging: { color: '#8A5A3C', icon: 'mushroom' },
   ai: { color: '#6A57C8', icon: 'ai' },
   coding: { color: '#2E7D5B', icon: 'code' },
+  electronics: { color: '#D9A02B', icon: 'chip' },
 };
