@@ -215,7 +215,8 @@ section:first-of-type { border-top: 0; padding-top: 0; }
 .pdf-view form { position: absolute; top: 0.75rem; right: 1.5rem; margin: 0; }
 .pdf-close { width: 2.25rem; height: 2.25rem; padding: 0; border: 0; border-radius: 50%; font-size: 1.5rem; line-height: 1; background: rgba(0, 0, 0, 0.6); color: #FFFFFF; cursor: pointer; }
 .pdf-close:hover { background: rgba(0, 0, 0, 0.8); }
-.pdf-view iframe { flex: 1; width: 100%; border: 0; background: #FFFFFF; }
+.pdf-pages { flex: 1; overflow-y: auto; display: grid; gap: 0.75rem; padding: 0.75rem; background: var(--rule-2); }
+.pdf-pages canvas { width: 100%; background: #FFFFFF; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2); }
 
 /* ---------- icons ---------- */
 .icon { width: 1em; height: 1em; vertical-align: -0.125em; margin-right: 0.35em; }
@@ -352,8 +353,6 @@ a.plabel:hover h3 { color: var(--link); text-decoration: underline; }
 .field :is(input, textarea):focus-visible { outline: 2px solid var(--link); outline-offset: 1px; border-color: var(--link); }
 .form-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; }
 .contact-form button { font: inherit; font-weight: 600; padding: 0.55rem 1.1rem; border: 0; border-radius: var(--radius); background: var(--accent); color: var(--accent-ink); cursor: pointer; }
-.contact-form button:disabled { opacity: 0.5; cursor: not-allowed; }
-.form-note { font-size: 0.85rem; color: var(--muted); }
 @media (max-width: 34rem) { .contact-form { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- footer ---------- */

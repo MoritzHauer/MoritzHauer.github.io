@@ -148,26 +148,43 @@ const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
     </section>
   )}
 
-  {/* PDF preview for the CV and certificate links. Without a built-in PDF viewer (most phones) the links just open the file. */}
+  {/* PDF preview for the CV and certificate links. pdf.js draws the pages, so no browser viewer controls show up. */}
   <dialog class="pdf-view" aria-label="PDF preview">
     <form method="dialog"><button class="pdf-close" aria-label="Close">&times;</button></form>
-    <iframe title="PDF preview"></iframe>
+    <div class="pdf-pages"></div>
   </dialog>
-  <script is:inline>
-    (() => {
-      const dlg = document.querySelector('.pdf-view');
-      const frame = dlg.querySelector('iframe');
-      document.addEventListener('click', (e) => {
-        const a = e.target.closest('a[href$=".pdf"]');
-        if (!a || e.defaultPrevented || !navigator.pdfViewerEnabled || e.button || e.ctrlKey || e.metaKey || e.shiftKey) return;
-        e.preventDefault();
-        dlg.setAttribute('aria-label', a.dataset.title ?? a.textContent.replace(/\s*PDF\s*$/, '').trim());
-        // Hides the viewer's toolbar and sidebar in Chrome, Edge and Safari; Firefox ignores it.
-        frame.src = `${a.href}#toolbar=0&navpanes=0`;
-        dlg.showModal();
-      });
-      dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
-      dlg.addEventListener('close', () => { frame.src = 'about:blank'; });
-    })();
+  <script>
+    const dlg = document.querySelector('.pdf-view');
+    const pages = dlg.querySelector('.pdf-pages');
+    let opened = 0;
+
+    document.addEventListener('click', async (e) => {
+      const a = e.target.closest('a[href$=".pdf"]');
+      if (!a || e.defaultPrevented || e.button || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      e.preventDefault();
+      const run = ++opened;
+      dlg.setAttribute('aria-label', a.dataset.title ?? a.textContent.replace(/\s*PDF\s*$/, '').trim());
+      pages.replaceChildren();
+      dlg.showModal();
+      try {
+        // Loaded on first use only: pdf.js is the heaviest thing on the page.
+        const [pdfjs, { default: worker }] = await Promise.all([import('pdfjs-dist'), import('pdfjs-dist/build/pdf.worker.min.mjs?url')]);
+        pdfjs.GlobalWorkerOptions.workerSrc = worker;
+        const doc = await pdfjs.getDocument({ url: a.href }).promise;
+        for (let n = 1; n <= doc.numPages; n++) {
+          const page = await doc.getPage(n);
+          const viewport = page.getViewport({ scale: (pages.clientWidth / page.getViewport({ scale: 1 }).width) * devicePixelRatio });
+          const canvas = Object.assign(document.createElement('canvas'), { width: viewport.width, height: viewport.height });
+          canvas.setAttribute('role', 'img');
+          canvas.setAttribute('aria-label', `Page ${n} of ${doc.numPages}`);
+          await page.render({ canvas, canvasContext: canvas.getContext('2d'), viewport }).promise;
+          if (run !== opened || !dlg.open) return; // closed or replaced while rendering
+          pages.append(canvas);
+        }
+      } catch {
+        if (run === opened) location.href = a.href; // could not render: show the file the normal way
+      }
+    });
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
   </script>
 </Base>
