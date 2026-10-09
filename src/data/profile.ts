@@ -5,6 +5,7 @@ export const PROFILE = {
   location: 'Karlsruhe, Germany',
   github: 'https://github.com/MoritzHauer',
   linkedin: 'https://www.linkedin.com/in/moritz-hauer-82795a3a9/',
+  email: '', // contact form stays hidden until this is set
   description: 'Experienced software engineer: industrial simulation and test infrastructure, side projects, and AI workflows.',
 
   hero: {

@@ -115,16 +115,14 @@ const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
   <section>
     <p class="label">Contact</p>
     <p class="lede">{PROFILE.contact}</p>
-    <form class="contact-form">
-      <div class="field"><label for="cf-name">Name</label><input id="cf-name" name="name" autocomplete="name" required /></div>
-      <div class="field"><label for="cf-email">Your email</label><input id="cf-email" name="email" type="email" autocomplete="email" required /></div>
-      <div class="field wide"><label for="cf-message">Message</label><textarea id="cf-message" name="message" rows="5" required></textarea></div>
-      <div class="form-foot wide">
-        {/* ponytail: no receiving address yet. Add the form `action` and remove `disabled` once it exists. */}
-        <button type="submit" disabled>Send message</button>
-        <span class="form-note">Sending is switched off for now. Until then, reach me on <a href={PROFILE.linkedin}>LinkedIn</a>.</span>
-      </div>
-    </form>
+    {PROFILE.email && (
+      <form class="contact-form" action={`mailto:${PROFILE.email}`} method="post" enctype="text/plain">
+        <div class="field"><label for="cf-name">Name</label><input id="cf-name" name="name" autocomplete="name" required /></div>
+        <div class="field"><label for="cf-email">Your email</label><input id="cf-email" name="email" type="email" autocomplete="email" required /></div>
+        <div class="field wide"><label for="cf-message">Message</label><textarea id="cf-message" name="message" rows="5" required></textarea></div>
+        <div class="form-foot wide"><button type="submit">Send message</button></div>
+      </form>
+    )}
     <p>
       <a href={PROFILE.github}><Icon name="github" />{bare(PROFILE.github)}</a> &middot;
       <a href={PROFILE.linkedin}><Icon name="linkedin" />LinkedIn</a>
