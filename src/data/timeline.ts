@@ -1,7 +1,10 @@
+import { PROFILE } from './profile';
+
 // Personal content for the career path. The site logic in src/components/Timeline.astro only reads this file.
 //
 // STEPS: oldest first. A leading ~ in `when` marks a date still to confirm. `logo` is a file in
 // public/logos/; without a logo, set `icon` to an Icon.astro name (e.g. 'cert' for a certificate).
+// Keep facts in step with EXPERIENCE in cv.ts; the wording here is shorter on purpose.
 export const STEPS = [
   { date: 2015, when: '~2015', title: 'B.Sc.', org: 'Hochschule Offenburg', note: 'Bachelor’s degree.', logo: 'hs-offenburg.png' },
   { date: 2018.7, when: '~2018 – 2021', title: 'M.Sc. Computer Science', org: 'KIT', note: 'Machine learning, robotics and embedded systems. Thesis on indoor sound source localization with multilateration.', logo: 'kit.jpg' },
@@ -11,7 +14,7 @@ export const STEPS = [
 ];
 
 // Label at the end of the path.
-export const NEXT = 'Open for new impactful projects';
+export const NEXT = PROFILE.status;
 
 // Side projects, shown next to published blog posts behind the legend switch.
 export const SIDE = [

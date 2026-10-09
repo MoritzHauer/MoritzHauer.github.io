@@ -5,9 +5,8 @@ import Timeline from '../components/Timeline.astro';
 import { getPosts } from '../lib/posts';
 import { PROFILE } from '../data/profile';
 import { EXPERIENCE, STACK, CV, CERTS, TAG_ICONS } from '../data/cv';
-import { publicFile } from '../lib/public';
+import { base, publicFile } from '../lib/public';
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const cvFiles = CV.map((c) => ({ ...c, href: publicFile(`cv/${c.file}`) })).filter((c) => c.href);
 const certs = [...CERTS].sort((a, b) => b.date - a.date).map((c) => ({ ...c, href: publicFile(c.file && `certificates/${c.file}`) }));
 const posts = (await getPosts()).filter((post) => post.data.kind === 'engineering').slice(0, 3);

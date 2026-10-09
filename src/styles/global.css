@@ -5,7 +5,7 @@
    --------------------------------------------------------------- */
 
 /* Nature: topographic map ground, yellow signpost labels, a railway through the mountains. */
-:root, :root[data-look='nature'] {
+:root[data-look='nature'] {
   color-scheme: light;
   --paper: #EDF0E9; --surface: #FAFBF7; --ink: #1E2B22; --muted: #52604F; --faint: #7D8878;
   --rule: #CBD4C6; --rule-2: #DDE3D8;
@@ -27,8 +27,8 @@
   --c0: #B5503B; --c1: #2F6690; --c2: #3F7F45; --c3: #C98A1B; --c4: #6C4F8C; --c5: #1F7A7A;
 }
 
-/* River: warm orange, wood brown and leaf green, soft shapes. */
-:root[data-look='river'] {
+/* River, the default (src/themes/index.ts): warm orange, wood brown and leaf green, soft shapes. */
+:root, :root[data-look='river'] {
   color-scheme: light;
   --paper: #F3F7F3; --surface: #FFFFFF; --ink: #3A2616; --muted: #6B5746; --faint: #97877A;
   --rule: #E4DDD0; --rule-2: #EFE9DF;

@@ -14,6 +14,7 @@ Personal content is kept apart from the site logic. To make the site yours, edit
 
 | Path | What |
 |---|---|
+| `astro.config.mjs` | `site`: your GitHub Pages URL, used for canonical links. |
 | `src/data/profile.ts` | Name, links, intro text, contact text, projects. |
 | `src/data/timeline.ts` | Career steps, side projects, topic icons for posts. |
 | `src/data/cv.ts` | Experience entries, tech stack, CV download list, certificates (also drawn on the timeline, behind their own legend switch). |
@@ -22,16 +23,18 @@ Personal content is kept apart from the site logic. To make the site yours, edit
 | `public/cv/` | CV PDFs. A download button appears only for files listed in `cv.ts` that exist here. |
 | `public/certificates/` | Certificate PDFs. A certificate links to its PDF only once the file exists here. |
 
-Everything else, including `public/theme/`, is logic and design.
+Everything else, including `public/theme/`, is logic and design. One exception: the river theme's beaver sprite
+is BetterBeaver's mascot, so a fork should replace `public/theme/beaver-swimming.png`.
 
 ## Structure
 
 | Path | What |
 |---|---|
 | `src/styles/global.css` | The entire design system. One token block per theme (nature, river, `</dev>`) at the top. |
+| `src/themes/` | Theme list and default (`index.ts`), timeline scenery per theme (`scenery.ts`), the sprite that follows the mouse (`Sprites.astro`). A new theme touches these and its token block in `global.css`. |
 | `src/layouts/Base.astro` | Head, header with the theme switch, footer. Every page uses it. |
 | `src/pages/index.astro` | Home: intro, path timeline, projects, contact, latest three posts. |
-| `src/components/Timeline.astro` | The path timeline: road, scenery, point spacing, label placement, previews. |
+| `src/components/Timeline.astro` | The path timeline: road, point spacing, label placement, previews. Scenery comes from `src/themes/`. |
 | `src/components/Icon.astro` | Inline SVG icons. |
 | `src/pages/blog/` | Blog index and post template. |
 | `src/blog/*.md` | Posts. Add a file, it appears — no registration step. |
