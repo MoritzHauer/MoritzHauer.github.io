@@ -2,29 +2,28 @@
 import '../styles/global.css';
 import Icon from '../components/Icon.astro';
 import { PROFILE } from '../data/profile';
+import { base } from '../lib/public';
+import { THEMES, DEFAULT_THEME } from '../themes';
 
 const { title, description = PROFILE.description } = Astro.props;
 const path = Astro.url.pathname;
-// Build every internal link from BASE_URL, so a project-page base path would still work.
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const home = `${base}/`;
 const blog = `${base}/blog`;
 const isCurrent = (href) => (href === home ? path === home : path.startsWith(href));
-const LOOKS = [['nature', 'Nature', 'mountain'], ['river', 'River', 'waves'], ['dev', '</dev>', 'chip']];
 ---
 <!doctype html>
-<html lang="en" data-look="nature">
+<html lang="en" data-look={DEFAULT_THEME}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={new URL(path, Astro.site)} />
-    <script is:inline>
+    <script is:inline define:vars={{ looks: THEMES.map((t) => t.id) }}>
       // Apply the saved theme before first paint, so the page never flashes the default one.
       try {
         const look = localStorage.getItem('look');
-        if (['nature', 'river', 'dev'].includes(look)) document.documentElement.dataset.look = look;
+        if (looks.includes(look)) document.documentElement.dataset.look = look;
       } catch {}
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -43,8 +42,8 @@ const LOOKS = [['nature', 'Nature', 'mountain'], ['river', 'River', 'waves'], ['
           <a href={blog} aria-current={isCurrent(blog) ? 'page' : undefined}>blog</a>
         </nav>
         <div class="looks" role="radiogroup" aria-label="Theme">
-          {LOOKS.map(([key, label, icon]) => (
-            <label title={label}><input type="radio" name="look" value={key} /><Icon name={icon} class="" /><span>{label}</span></label>
+          {THEMES.map(({ id, label, icon }) => (
+            <label title={label}><input type="radio" name="look" value={id} /><Icon name={icon} class="" /><span>{label}</span></label>
           ))}
         </div>
       </div>

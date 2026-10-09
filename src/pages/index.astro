@@ -4,14 +4,14 @@ import Icon from '../components/Icon.astro';
 import Timeline from '../components/Timeline.astro';
 import { getPosts } from '../lib/posts';
 import { PROFILE } from '../data/profile';
-import { EXPERIENCE, STACK, CV, CERTS } from '../data/cv';
-import { publicFile } from '../lib/public';
+import { EXPERIENCE, STACK, CV, CERTS, TAG_ICONS } from '../data/cv';
+import { base, publicFile } from '../lib/public';
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const cvFiles = CV.map((c) => ({ ...c, href: publicFile(`cv/${c.file}`) })).filter((c) => c.href);
 const certs = [...CERTS].sort((a, b) => b.date - a.date).map((c) => ({ ...c, href: publicFile(c.file && `certificates/${c.file}`) }));
-const posts = (await getPosts()).slice(0, 3);
+const posts = (await getPosts()).filter((post) => post.data.kind === 'engineering').slice(0, 3);
 const fmt = (d) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short' });
+const tagIcons = { ...TAG_ICONS, ...Object.fromEntries(STACK.flatMap((g) => g.items).map((t) => [t.name, t.icon])) };
 const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
 ---
 <Base title={PROFILE.name}>
@@ -37,7 +37,7 @@ const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
               <span class="job-when">{job.when} · {job.place}</span>
             </div>
             <ul>{job.points.map((point) => <li>{point}</li>)}</ul>
-            <div class="stack">{job.stack.map((tech) => <span>{tech}</span>)}</div>
+            <div class="stack">{job.stack.map((tech) => <span>{tagIcons[tech] && <i style={`--src: url(${base}/logos/tech/${tagIcons[tech]}.svg)`} aria-hidden="true"></i>}{tech}</span>)}</div>
           </div>
         </li>
       ))}
@@ -57,7 +57,7 @@ const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
             </div>
             <p class="project-summary">{p.summary}</p>
             <ul>{p.points.map((point) => <li>{point}</li>)}</ul>
-            <div class="stack">{p.stack.map((tech) => <span>{tech}</span>)}</div>
+            <div class="stack">{p.stack.map((tech) => <span>{tagIcons[tech] && <i style={`--src: url(${base}/logos/tech/${tagIcons[tech]}.svg)`} aria-hidden="true"></i>}{tech}</span>)}</div>
           </div>
         </div>
       ))}
@@ -88,7 +88,7 @@ const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
       <p class="label">CV</p>
       <p class="cv-links">
         {cvFiles.map((c) => (
-          <a class="cv-link" href={c.href} hreflang={c.lang} lang={c.lang}><Icon name="post" />{c.label} <small>PDF</small></a>
+          <a class="cv-link" href={c.href} data-title={`CV · ${c.label}`} hreflang={c.lang} lang={c.lang}><Icon name="post" />{c.label} <small>PDF</small></a>
         ))}
       </p>
     </section>
@@ -114,16 +114,14 @@ const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
   <section>
     <p class="label">Contact</p>
     <p class="lede">{PROFILE.contact}</p>
-    <form class="contact-form">
-      <div class="field"><label for="cf-name">Name</label><input id="cf-name" name="name" autocomplete="name" required /></div>
-      <div class="field"><label for="cf-email">Your email</label><input id="cf-email" name="email" type="email" autocomplete="email" required /></div>
-      <div class="field wide"><label for="cf-message">Message</label><textarea id="cf-message" name="message" rows="5" required></textarea></div>
-      <div class="form-foot wide">
-        {/* ponytail: no receiving address yet. Add the form `action` and remove `disabled` once it exists. */}
-        <button type="submit" disabled>Send message</button>
-        <span class="form-note">Sending is switched off for now. Until then, reach me on <a href={PROFILE.linkedin}>LinkedIn</a>.</span>
-      </div>
-    </form>
+    {PROFILE.email && (
+      <form class="contact-form" action={`mailto:${PROFILE.email}`} method="post" enctype="text/plain">
+        <div class="field"><label for="cf-name">Name</label><input id="cf-name" name="name" autocomplete="name" required /></div>
+        <div class="field"><label for="cf-email">Your email</label><input id="cf-email" name="email" type="email" autocomplete="email" required /></div>
+        <div class="field wide"><label for="cf-message">Message</label><textarea id="cf-message" name="message" rows="5" required></textarea></div>
+        <div class="form-foot wide"><button type="submit">Send message</button></div>
+      </form>
+    )}
     <p>
       <a href={PROFILE.github}><Icon name="github" />{bare(PROFILE.github)}</a> &middot;
       <a href={PROFILE.linkedin}><Icon name="linkedin" />LinkedIn</a>
@@ -146,4 +144,44 @@ const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
       </div>
     </section>
   )}
+
+  {/* PDF preview for the CV and certificate links. pdf.js draws the pages, so no browser viewer controls show up. */}
+  <dialog class="pdf-view" aria-label="PDF preview">
+    <form method="dialog"><button class="pdf-close" aria-label="Close">&times;</button></form>
+    <div class="pdf-pages"></div>
+  </dialog>
+  <script>
+    const dlg = document.querySelector('.pdf-view');
+    const pages = dlg.querySelector('.pdf-pages');
+    let opened = 0;
+
+    document.addEventListener('click', async (e) => {
+      const a = e.target.closest('a[href$=".pdf"]');
+      if (!a || e.defaultPrevented || e.button || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      e.preventDefault();
+      const run = ++opened;
+      dlg.setAttribute('aria-label', a.dataset.title ?? a.textContent.replace(/\s*PDF\s*$/, '').trim());
+      pages.replaceChildren();
+      dlg.showModal();
+      try {
+        // Loaded on first use only: pdf.js is the heaviest thing on the page.
+        const [pdfjs, { default: worker }] = await Promise.all([import('pdfjs-dist'), import('pdfjs-dist/build/pdf.worker.min.mjs?url')]);
+        pdfjs.GlobalWorkerOptions.workerSrc = worker;
+        const doc = await pdfjs.getDocument({ url: a.href }).promise;
+        for (let n = 1; n <= doc.numPages; n++) {
+          const page = await doc.getPage(n);
+          const viewport = page.getViewport({ scale: (pages.clientWidth / page.getViewport({ scale: 1 }).width) * devicePixelRatio });
+          const canvas = Object.assign(document.createElement('canvas'), { width: viewport.width, height: viewport.height });
+          canvas.setAttribute('role', 'img');
+          canvas.setAttribute('aria-label', `Page ${n} of ${doc.numPages}`);
+          await page.render({ canvas, canvasContext: canvas.getContext('2d'), viewport }).promise;
+          if (run !== opened || !dlg.open) return; // closed or replaced while rendering
+          pages.append(canvas);
+        }
+      } catch {
+        if (run === opened) location.href = a.href; // could not render: show the file the normal way
+      }
+    });
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+  </script>
 </Base>

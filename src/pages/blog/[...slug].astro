@@ -1,7 +1,7 @@
 ---
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { getPosts } from '../../lib/posts';
+import { getPosts, happenedAt } from '../../lib/posts';
 import { PROFILE } from '../../data/profile';
 
 export async function getStaticPaths() {
@@ -16,7 +16,8 @@ const fmt = (d) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'long
 <Base title={`${post.data.title} — ${PROFILE.name}`} description={post.data.description}>
   <article class="article">
     <div class="article-meta">
-      <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+      <time datetime={post.data.date.toISOString()}>Published {fmt(post.data.date)}</time>
+      {post.data.happened && <span>about {happenedAt(post.data.happened).label}</span>}
       {post.data.tags.map((tag) => <span>#{tag}</span>)}
     </div>
     <h1>{post.data.title}</h1>

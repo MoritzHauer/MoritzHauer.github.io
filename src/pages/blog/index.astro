@@ -2,10 +2,10 @@
 import Base from '../../layouts/Base.astro';
 import { getPosts } from '../../lib/posts';
 import { PROFILE } from '../../data/profile';
-
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+import { base } from '../../lib/public';
 
 const posts = await getPosts();
+const hasPersonal = posts.some((post) => post.data.kind === 'personal');
 
 const fmt = (d) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short' });
 ---
@@ -16,9 +16,12 @@ const fmt = (d) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'shor
   </section>
 
   <section>
+    {hasPersonal && (
+      <label class="switch"><input type="checkbox" role="switch" id="show-personal" /><span class="track"></span>Personal posts</label>
+    )}
     <div class="posts">
       {posts.map((post) => (
-        <a class="post-link" href={`${base}/blog/${post.id}`}>
+        <a class="post-link" data-kind={post.data.kind} href={`${base}/blog/${post.id}`}>
           <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
           <div>
             <h3>{post.data.title}</h3>
