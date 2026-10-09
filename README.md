@@ -26,6 +26,8 @@ Personal content is kept apart from the site logic. To make the site yours, edit
 Everything else, including `public/theme/`, is logic and design. One exception: the river theme's beaver sprite
 is BetterBeaver's mascot, so a fork should replace `public/theme/beaver-swimming.png`.
 
+The code is MIT-licensed; the personal content listed above is not. See [LICENSE](LICENSE).
+
 ## Structure
 
 | Path | What |
