@@ -11,7 +11,7 @@ export const EXPERIENCE = [
       'Lets control software be developed and tested before the physical machine exists, with nightly automated tests on all branches; now rolling out to sales and customers, who program their processes on a virtual machine before delivery.',
       'Member of the software architecture team since Jul 2026.',
     ],
-    stack: ['C++', 'Python', 'React'],
+    stack: ['C++', 'C#', 'Python'],
   },
   {
     org: 'INERATEC', role: 'Software Engineer, Automation', when: 'Oct 2021 – Sep 2022', place: 'Karlsruhe', logo: 'ineratec.png',
@@ -19,7 +19,7 @@ export const EXPERIENCE = [
       'Developed a digital twin of a regenerative energy production site for simulation, testing and remote monitoring before deployment.',
       'Implemented data processing and monitoring tools.',
     ],
-    stack: ['Python', 'FastAPI', 'pandas', 'Node.js', 'PostgreSQL', 'React'],
+    stack: ['Python', 'pandas', 'Node.js'],
   },
   {
     org: 'KIT, Dependable Nano Computing', role: 'Research Assistant', when: 'Dec 2019 – Jul 2020', place: 'Karlsruhe', logo: 'kit.jpg',
@@ -69,7 +69,7 @@ export const CERTS = [
   { date: 2016.05, when: 'Jan 2016', title: 'Mentor, MINT-College', org: 'Hochschule Offenburg', note: 'Mentored a group of first-semester students through winter semester 2015/16, after a mentor training in project management basics.', file: 'mint-college-mentor.pdf' },
   { date: 2016.33, when: 'Apr 2016', title: 'ISTQB Certified Tester', org: 'Foundation Level', note: 'Software testing fundamentals: test techniques, test management and testing across the life cycle.', file: 'istqb-certified-tester-foundation.pdf' },
   { date: 2022.85, when: 'Nov 2022', title: 'Digital Twin Implementation', org: 'University4Industry · IDTA', note: 'Three-week training on the digital twin and the Asset Administration Shell in practice.', file: 'idta-digital-twin-implementation.pdf' },
-  { date: 2026.3, when: 'Spring 2026', title: 'AI Safety Collab', org: 'ENAIS', note: 'Structured course on AI alignment and safety.' },
+  { date: 2026.3, when: 'Spring 2026', title: 'AI Safety Collab', org: 'ENAIS', note: 'Structured course on AI alignment and safety.', file: 'ai-safety-collab.pdf' },
 ];
 
 // PDFs in public/cv/. A button only appears once its file exists, so a missing PDF never ships a dead link.
