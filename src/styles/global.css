@@ -120,7 +120,14 @@ body::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-even
 .looks input { position: absolute; opacity: 0; width: 1px; height: 1px; }
 .looks label:has(input:checked) { background: var(--accent); color: var(--accent-ink); }
 .looks label:has(input:focus-visible) { outline: 2px solid var(--link); outline-offset: 2px; }
-@media (max-width: 40rem) { .looks label span { display: none; } }
+@media (max-width: 40rem) {
+  .looks label span { display: none; }
+  /* Keep name, nav and theme switch on one row on phones, even with the wider display fonts. */
+  .site-head .wrap { flex-wrap: nowrap; gap: 0.9rem; padding-left: 1rem; padding-right: 1rem; }
+  .site-head .name { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1.1rem; }
+  .site-head nav { gap: 0.8rem; }
+  .looks label { padding: 0.3rem 0.4rem; }
+}
 
 /* ---------- shared type ---------- */
 h1 { font-family: var(--f-display); font-weight: var(--display-weight); font-size: var(--h1-size); line-height: 1.12; margin: 0 0 1rem; text-wrap: balance; }
