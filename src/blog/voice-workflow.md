@@ -1,20 +1,22 @@
 ---
 title: "I talk to my coding agents through a headset"
 date: 2026-10-16
-description: "Dictated prompts, two-sentence spoken replies and local voice commands that never cost a model call, across several Claude Code sessions."
+description: "Dictated prompts, two-sentence spoken replies from a local voice, and voice commands that never cost a model call, across a crew of agents."
 kind: engineering
 tags: ["ai", "claude-code", "voice"]
 draft: true
 ---
 
-I've set my coding agents up so I can work with them without looking at the screen. I dictate prompts
-through a headset into Claude Code, hear a short spoken summary when an agent has something to
-say, and handle the small stuff, like repeating a line or checking what every session is doing,
-with voice commands that are answered locally and never reach the model. The sessions run in
-herdr, a terminal workspace manager, with firstmate supervising one second mate per project. The
-decision behind all of it was to keep both directions short: I speak a prompt instead of typing
-it, and an agent speaks only when it has a finding, a question or a suggestion, in at most two
-sentences.
+<!-- TODO author: elevator pitch, why this post is worth reading and what you find distinctive about this workflow compared to others -->
+[TODO author: elevator pitch, why this is worth reading and what is distinctive compared to other agent workflows]
+
+I work with my coding agents by voice in both directions. I dictate prompts through a headset, and
+an agent speaks only when it has a finding, a question or a suggestion, in at most two short
+sentences, in a voice generated on my own machine. Housekeeping such as repeating a line or asking
+what every session is doing goes through voice commands that are handled locally and never reach
+the model, so they cost no model call. Several agents run at once, one per project under a
+supervising agent, and work routed through that supervisor stays quiet, so only the agent I'm
+talking to directly answers.
 
 <figure role="img" aria-label="Flow diagram: speech from the headset goes into Claude Code's voice input. A prompt starting with 'computer' is handled by a local command hook. Any other prompt goes to the model, and the marked last line of its reply is spoken by local Kokoro text-to-speech back into the headset.">
 <svg viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" font-family="inherit" font-size="13">
@@ -56,36 +58,44 @@ sentences.
 </svg>
 </figure>
 
-## Dictation uses Claude Code's own voice input
+## Prompts go in through Claude Code's own voice input
 
 The input side is the least custom part. Claude Code has built-in voice input, which I run in tap
 mode with auto-submit, so a dictated prompt is sent as soon as I stop recording. The only thing I
 added is the trigger: a small service turns the headset's button into a Space keypress, which
-starts and stops the recording. Getting there needed one awkward detour. The service learns about
-the button press from WirePlumber's debug log, where the headset's hang-up command shows up, so
-WirePlumber has to run with global debug logging switched on to let the button work while the
-microphone is in use.
+starts and stops the recording.
 
 ## Agents speak only their last line
 
-Spoken output is where the time would go if every reply were read aloud, so agents don't read
-their replies at all. A block in my global
-Claude Code instructions tells every agent to end a reply with one marked line, only when there
-is a finding, a question for me, or a concrete suggestion for how to continue, written casually and
-kept to at most two short sentences. Routine progress and acknowledgements get no such line and
-stay silent.
+A block in my global Claude Code instructions tells every agent to end a reply with one marked
+line, only when there is a finding, a question for me, or a concrete suggestion for how to
+continue, kept to at most two short sentences. Routine progress and acknowledgements get no such
+line and stay silent. A Stop hook speaks that line, prefixed with the project name so I know which
+session is talking. Questions and permission prompts are read aloud too. Playback is queued across sessions and pauses while a
+microphone is recording, so two agents finishing at once take turns instead of talking over each
+other.
 
-A Stop hook picks up that line and speaks it with Kokoro, a text-to-speech model that runs
-locally, prefixed with the project name so I know which session is talking. Questions and
-permission prompts are read aloud too, since those are exactly the moments an agent is waiting on
-me. Playback is queued across sessions, so two agents finishing at once take turns instead of
-talking over each other, and it pauses while a microphone is recording.
+## I compared three families of local voices
+
+Every text-to-speech option I tried runs locally and offline. The baseline was the system's eSpeak
+NG through speech-dispatcher, which works but sounds robotic. Next I sampled nine Piper voices side
+by side (lessac, ryan, amy, hfc_female, kristin, joe, alan, northern_english_male and cori), and
+after that a set of Kokoro samples. I settled on Kokoro v1.0, the 82M-parameter model, run through
+kokoro-onnx with the af_heart voice.
+
+<!-- TODO author: your reasons for choosing local voices and Kokoro with af_heart over Piper and eSpeak NG -->
+[TODO author: reasons for choosing Kokoro]
+
+For speech-to-text the workflow uses Claude Code's built-in voice input, set up as described
+above. A local Whisper transcriber, whisper-ctranslate2 on
+top of faster-whisper, is installed as an offline alternative, but the workflow doesn't use it.
+
+<!-- TODO author: your reasons for using Claude Code's built-in voice input instead of the local Whisper transcriber -->
+[TODO author: reasons for choosing Claude Code's voice input over local Whisper]
 
 ## Voice commands never reach the model
 
-Some things I want to say aren't prompts at all. A UserPromptSubmit hook catches any prompt that
-starts with "computer" and handles it locally, so the model never sees it and no model call is
-spent on it:
+A UserPromptSubmit hook catches any prompt that starts with "computer" and handles it locally:
 
 | Say | Effect |
 |---|---|
@@ -98,28 +108,38 @@ spent on it:
 | computer, a second mate's name, then a message | send the message verbatim to that second mate |
 
 The rule is blunt: a prompt that starts with "computer" is always taken as a command, so I can't
-begin a real prompt with that word. There is also a herdr dependency here. Claude Code puts a
-blocked prompt back into the input box, and the hook clears it again through herdr, which means
-the commands only clean up after themselves inside herdr.
+begin a real prompt with that word.
 
 ## Firstmate keeps the second mates quiet
 
-With several projects running, the risk is a headset full of agents. Firstmate supervises a
-second mate per project, and work that firstmate routes to a second mate stays silent and comes
-back through firstmate. A second mate speaks only when I talk to it directly in its own window.
-The last two commands in the table above build on that: I can jump to a second mate's tab, or
-hand it a message word for word, without going through firstmate and without touching the
-keyboard.
+The sessions run in herdr, a terminal workspace manager, and firstmate supervises one second mate
+per project. Work that firstmate routes to a second mate stays silent and comes back through
+firstmate; a second mate speaks only when I talk to it directly in its own window. The last two
+commands in the table build on that, so I can jump to a second mate's tab or hand it a message
+word for word without touching the keyboard.
 
 ## The savings are in what doesn't happen
 
-I haven't measured any of this, so the efficiency argument is about what the setup leaves out.
-A voice command costs no model call. A spoken reply is capped at two short sentences, and routine
-replies don't speak at all, so listening stays short even with several sessions working.
-Focus and mute decide how many of them can interrupt me. The rough edges are real, though: besides
-the WirePlumber logging and the reserved word, the status command keeps reporting "needs
-permission" until that turn ends, even after I've granted it.
+I haven't measured any of this, so the efficiency argument is about what the setup leaves out. A
+voice command costs no model call. A spoken reply is capped at two short sentences, and routine
+replies don't speak at all, so listening stays short even with several sessions working. Focus and
+mute decide how many of them can interrupt me. The rough edges are real, though: the headset button
+only works because WirePlumber runs with global debug logging, the commands clean up after
+themselves only inside herdr, and the status command keeps reporting "needs permission" until that
+turn ends, even after I've granted it.
 
-The supervising layer is [firstmate](https://github.com/kunchenguid/firstmate), and if you're
-building something similar, I'm happy to compare notes on
+If you're building something similar, I'm happy to compare notes on
 [GitHub](https://github.com/MoritzHauer).
+
+## Sources and credits
+
+- [firstmate](https://github.com/kunchenguid/firstmate) by Kun Chen, the supervisor that runs the
+  second mates, and his [treehouse](https://github.com/kunchenguid/treehouse) worktree tool.
+- [herdr](https://herdr.dev), the terminal workspace manager the sessions run in.
+- [Claude Code](https://code.claude.com/docs) by Anthropic, including its built-in voice input.
+- [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) by hexgrad, the voice model, run through
+  [kokoro-onnx](https://github.com/thewh1teagle/kokoro-onnx) by thewh1teagle.
+- [Piper](https://github.com/rhasspy/piper) and [eSpeak NG](https://github.com/espeak-ng/espeak-ng),
+  the other voices in the comparison.
+- [faster-whisper](https://github.com/SYSTRAN/faster-whisper), under the local transcriber I keep as
+  an alternative.
