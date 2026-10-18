@@ -6,7 +6,7 @@ kind: personal
 tone: playful
 happened: 2019-10
 tags: ["electronics", "wled"]
-draft: true
+draft: false
 ---
 
 For my project in the Ubiquitous Computing course at KIT, I built a coffee table that doubles as a

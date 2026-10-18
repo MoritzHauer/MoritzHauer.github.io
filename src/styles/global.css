@@ -230,8 +230,6 @@ section:first-of-type { border-top: 0; padding-top: 0; }
 
 /* ---------- post list ---------- */
 .posts { display: flex; flex-direction: column; }
-.switch + .posts { margin-top: 1rem; }
-body:has(#show-personal:not(:checked)) .post-link[data-kind='personal'] { display: none; }
 .post-link { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1.25rem; padding: 1rem 0; border-bottom: 1px solid var(--rule-2); text-decoration: none; color: inherit; }
 .post-link:hover h3 { color: var(--link); }
 .post-link time { font-family: var(--f-mono); font-size: 0.82rem; color: var(--faint); font-variant-numeric: tabular-nums; padding-top: 0.2rem; }

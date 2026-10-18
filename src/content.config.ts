@@ -10,7 +10,7 @@ const blog = defineCollection({
     tags: z.array(z.string()).default([]),
     // Defaults to true: a post ships only when you explicitly set draft: false.
     draft: z.boolean().default(true),
-    // Engineering posts are the default feed; personal posts are hidden behind a switch.
+    // Classifies a post for timeline and other presentation choices.
     kind: z.enum(['engineering', 'personal']),
     // Which humor and honesty rules apply (docs/blog-style.md, Tone).
     tone: z.enum(['plain', 'playful']).default('plain'),
