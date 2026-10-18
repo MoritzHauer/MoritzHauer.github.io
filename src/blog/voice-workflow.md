@@ -4,7 +4,7 @@ date: 2026-10-16
 description: "Making progress on coding projects during housework, with local speech processing, short spoken replies, and control over interruptions."
 kind: engineering
 tags: ["ai", "claude-code", "voice"]
-draft: true
+draft: false
 ---
 
 I wanted to think through my projects and make progress while cleaning the kitchen. With a

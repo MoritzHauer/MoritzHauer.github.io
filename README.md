@@ -57,7 +57,7 @@ date: 2026-09-01
 description: "One sentence — shown in the list and as the meta description."
 tags: ["optional"]
 draft: false
-kind: engineering        # or personal: hidden by default behind a switch
+kind: engineering        # or personal
 # happened: 2019-06        # optional: when it took place; places the post on the timeline
 ---
 
@@ -66,8 +66,7 @@ Body in markdown.
 
 `date` is the publish date and drives sorting and listing everywhere. `happened` (optional) is
 when the post's subject actually took place, and only affects where it lands on the path
-timeline. Personal posts never appear in the home page's latest posts, and are hidden by default
-behind a "Personal posts" switch on `/blog` and on the timeline.
+timeline. Personal posts never appear in the home page's latest posts.
 
 The URL is the filename: `/blog/my-post`.
 
