@@ -1,6 +1,3 @@
----
-import { base } from '../lib/public';
----
 {/* One follower sprite per theme; global.css shows the one matching data-look. */}
 <svg class="sprite train" viewBox="0 0 64 34">
   <g class="steam" fill="#FFFFFF"><circle cx="49" cy="0" r="3" /><circle cx="55" cy="-4" r="2.2" /></g>
@@ -13,7 +10,12 @@ import { base } from '../lib/public';
   <g fill="#1E2B22"><circle cx="15" cy="27" r="5" /><circle cx="35" cy="27" r="5" /><circle cx="50" cy="27" r="5" /></g>
   <g fill="#CFC8BA"><circle cx="15" cy="27" r="1.6" /><circle cx="35" cy="27" r="1.6" /><circle cx="50" cy="27" r="1.6" /></g>
 </svg>
-<img class="sprite beaver" src={`${base}/theme/beaver-swimming.png`} alt="" width="76" height="30" />
+<svg class="sprite beaver" viewBox="0 0 76 30" aria-hidden="true">
+  <path d="M8 17h60l-9 10H20Z" fill="#A56B3F" />
+  <path d="M37 2v16H18Z" fill="#F5E6CA" />
+  <path d="M40 5v13h17Z" fill="#E9B85C" />
+  <path d="M38 1v19" stroke="#61452F" stroke-width="2" />
+</svg>
 <svg class="sprite robot" viewBox="0 0 36 46">
   <line x1="18" y1="3" x2="18" y2="10" stroke="#35D0E0" stroke-width="2" />
   <circle cx="18" cy="3" r="2.5" fill="#F472B6" />
