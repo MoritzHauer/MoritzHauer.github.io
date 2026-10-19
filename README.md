@@ -1,6 +1,6 @@
-# MoritzHauer.github.io
+# Personal site template
 
-Personal site and blog. Astro 5, no UI framework, no Tailwind — the CSS is one file.
+A forkable personal site and blog. Astro 5, no UI framework, no Tailwind — the CSS is one file.
 
 ```bash
 npm install
@@ -23,10 +23,11 @@ Personal content is kept apart from the site logic. To make the site yours, edit
 | `public/cv/` | CV PDFs. A download button appears only for files listed in `cv.ts` that exist here. |
 | `public/certificates/` | Certificate PDFs. A certificate links to its PDF only once the file exists here. |
 
-Everything else, including `public/theme/`, is logic and design. One exception: the river theme's beaver sprite
-is BetterBeaver's mascot, so a fork should replace `public/theme/beaver-swimming.png`.
+Everything else, including the theme sprites, is logic and design. The template uses a neutral
+sailboat for the river theme; the `personal` branch keeps the original site's mascot.
 
-The code is MIT-licensed; the personal content listed above is not. See [LICENSE](LICENSE).
+The code and neutral examples on `main` are MIT-licensed. Real personal content on the
+`personal` branch is not. See the LICENSE on each branch.
 
 ## Structure
 
@@ -73,15 +74,33 @@ The URL is the filename: `/blog/my-post`.
 **`draft` defaults to `true`.** Drafts appear in `npm run dev` and are excluded from
 `npm run build`, so an unfinished post cannot ship by accident.
 
-## Deploying to GitHub Pages
+## Branches and deploying to GitHub Pages
 
-`.github/workflows/deploy.yml` builds and deploys on every push to `main`.
+`main` is the forkable template with neutral example content. In this repository,
+`personal` is a long-lived branch containing the real profile, posts, documents, and
+images. Only `personal` deploys to https://moritzhauer.github.io.
 
-This is a **user page**: the repository is named `MoritzHauer.github.io`, so the site is served
-at `https://MoritzHauer.github.io` with no base path. Nothing else needs configuring in
-`astro.config.mjs`.
+The workflow listens for pushes to every branch and for manual runs, but builds and
+deploys only when the branch matches the Actions repository variable `PAGES_BRANCH`.
+When the variable is absent, it defaults to `main`. This repository sets
+`PAGES_BRANCH=personal`. Manual runs obey the same branch check.
 
-One-time setup in the repository: **Settings → Pages → Source → GitHub Actions**.
+Merge the initial `personal` PR first, then the template PR into `main`. Going forward,
+bring site improvements to the live site by merging `main` into `personal`, preserving
+your personal content when resolving conflicts. Review changes to the content paths
+above, blog images in `src/assets/`, and theme sprites before pushing that merge.
 
-Internal links are built from `import.meta.env.BASE_URL` rather than hard-coded, so moving this
-to a project page later only means adding `base: '/<repo-name>'` to `astro.config.mjs`.
+### Using a fork
+
+1. Fork `main` and rename the repository to `<user>.github.io` for a user page.
+2. Replace the example content in the paths above. Set `site` in `astro.config.mjs`
+   to `https://<user>.github.io`.
+3. In **Settings → Pages → Source**, select **GitHub Actions**. Enable Actions in
+   the fork if needed. Push to `main`; no `PAGES_BRANCH` variable is required.
+4. Optionally keep `main` as a template and create your own deploy branch. Set
+   **Settings → Secrets and variables → Actions → Variables → PAGES_BRANCH** to
+   that branch name and allow it in the `github-pages` environment's deployment
+   branch policies. Commit the workflow to that branch before deploying.
+
+Internal links use `import.meta.env.BASE_URL`. For a project page, also set
+`base: '/<repo-name>'` in `astro.config.mjs` and use the corresponding project URL.

@@ -109,10 +109,10 @@ Closing             one practical line with a link, no recap
 - **Closing.** No summary paragraph. The last line points the reader somewhere, as a real markdown
   link: the project, the repo, or the author's LinkedIn or GitHub from `src/data/profile.ts`. Never
   invent an address, never a sales pitch.
-  - "BetterBeaver is at [betterbeaver.de](https://betterbeaver.de) if you want to see the sync in
+  - "The example project is at [example.com](https://example.com) if you want to see the sync in
     action."
   - "If you're fighting the same sync problem, I'm happy to compare notes on
-    [LinkedIn](https://www.linkedin.com/in/moritz-hauer-82795a3a9/)."
+    [LinkedIn](https://www.linkedin.com)."
 
 ### Personal posts
 
@@ -226,7 +226,7 @@ date: 2026-09-14
 description: "A merge rule that looked fine until someone owned two devices, and what replaced it."
 kind: engineering
 happened: 2024-03
-tags: ["betterbeaver", "sync"]
+tags: ["coding", "sync"]
 draft: true
 ---
 ```
@@ -237,8 +237,8 @@ draft: true
 | `description` | One sentence, ≤ 155 chars, adds stakes or outcome; doesn't restate the title. Also the meta description, so it says plainly what the post is about even when the title is a pun | `A merge rule that looked fine until someone owned two devices, and what replaced it.` | `In this post I talk about offline sync.` |
 | `kind` | `engineering` or `personal`. Required | | |
 | `tone` | `plain` or `playful`. Optional, defaults to `plain`. Tells anyone editing or reviewing later which rules apply | `playful` | |
-| `tags` | 1–3, lowercase kebab-case. **The first tag must be a key of `TOPICS` in `src/data/timeline.ts`.** The timeline icon comes from the first tag that is a key, and the build does not check this. A new key needs the author's approval plus a color and an icon | `["betterbeaver", "sync"]` | `["Offline", "Web Development"]` |
+| `tags` | 1–3, lowercase kebab-case. **The first tag must be a key of `TOPICS` in `src/data/timeline.ts`.** The timeline icon comes from the first tag that is a key, and the build does not check this. A new key needs the author's approval plus a color and an icon | `["coding", "sync"]` | `["Offline", "Web Development"]` |
 | `date` | Required by the schema. While drafting: the drafting day. Changed to the publish date in the same edit that sets `draft: false`; it drives sorting and, without `happened`, the timeline position | | |
 | `happened` | Optional. `YYYY` or `YYYY-MM`: when the subject took place, if not now. For a span, the moment the post is about (launch, failure, hand-in). Positions the post on the timeline | `2019-06` | `2019-06-15` |
 | `draft` | `true` until the author publishes. Drafts show in `npm run dev` only | | |
-| filename | Short kebab-case slug from the subject, not the full title. Becomes the URL; never change it after publishing | `betterbeaver-sync-conflicts.md` | `last-write-wins-lost-my-users-reviews.md` |
+| filename | Short kebab-case slug from the subject, not the full title. Becomes the URL; never change it after publishing | `project-sync-conflicts.md` | `last-write-wins-lost-my-users-reviews.md` |

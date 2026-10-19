@@ -1,4 +1,4 @@
-The code in this repository is licensed under the MIT License below.
+MIT License below.
 Content is not: see "Content" at the end of this file.
 
 MIT License
@@ -23,17 +23,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Content
+The neutral example content is also covered by the MIT License. Personal content
+on the personal branch and in earlier commits is not licensed by this grant;
+it remains copyright Moritz Hauer, all rights reserved. Third-party logos remain
+the property of their respective owners.
 
-The following are not covered by the MIT License. Copyright (c) Moritz Hauer,
-all rights reserved:
-
-- src/data/ (personal data, texts and descriptions)
-- src/blog/ and src/assets/ (blog posts and their images)
-- public/cv/ and public/certificates/ (CV and certificate documents)
-- public/theme/beaver-swimming.png and public/logos/betterbeaver.png
-  (the BetterBeaver mascot and logo)
-
-Third-party logos in public/logos/ are the property of their respective owners.
 The stack icons in public/logos/tech/ are from Simple Icons (https://simpleicons.org)
 and are released under CC0 1.0.

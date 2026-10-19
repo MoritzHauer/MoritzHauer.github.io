@@ -1,8 +1,6 @@
 import { defineConfig } from 'astro/config';
 
-// GitHub Pages, user page: https://MoritzHauer.github.io
-// (repository must be named MoritzHauer.github.io). A project page would additionally
-// need `base: '/<repo-name>'`.
 export default defineConfig({
-  site: 'https://MoritzHauer.github.io',
+  // Replace <user> with your GitHub username. Project pages also need base: '/<repo-name>'.
+  site: 'https://example.github.io',
 });

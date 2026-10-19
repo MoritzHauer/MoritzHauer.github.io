@@ -1,39 +1,32 @@
-// Personal content: who you are and what the pages say. The site logic only reads this file.
-// Images (`image`) are files in public/logos/.
+// Replace these examples with your name, links, writing, and projects.
+// Optional images are filenames in public/logos/.
 export const PROFILE = {
-  name: 'Moritz Hauer',
-  location: 'Karlsruhe, Germany',
-  github: 'https://github.com/MoritzHauer',
-  linkedin: 'https://www.linkedin.com/in/moritz-hauer-82795a3a9/',
-  email: '', // contact form stays hidden until this is set
-  description: 'Experienced software engineer: industrial simulation and test infrastructure, side projects, and AI workflows.',
-
+  name: 'Your Name',
+  location: 'Your City',
+  github: 'https://github.com',
+  linkedin: 'https://www.linkedin.com',
+  email: '', // Set an email address to show the contact form.
+  description: 'A personal website for your work, projects, and notes.',
   hero: {
-    title: 'Experienced software engineer. Always a side project running.',
-    intro: 'I have built control software for power-to-gas plants and simulation and test infrastructure for industrial machines.',
-    highlight: 'Outside work I design, build and ship my own products, and AI is part of how I work every day: agent workflows, tooling, and a clear sense of where a model helps and where it needs checking.',
+    title: 'Hello, I am Your Name.',
+    intro: 'I build useful things and write about what I learn.',
+    highlight: 'Use this space to introduce your interests and your work.',
   },
-  status: 'Open for new impactful projects',
-  contact: 'Karlsruhe, Germany. Remote preferred, and open to selected freelance work.',
-
+  status: 'Working on the next idea',
+  contact: 'Find me online using the links below.',
   blog: {
-    description: 'Notes on engineering, the FabLab, and looking for mushrooms.',
-    intro: 'Engineering notes, and the things I do when I am not at a keyboard.',
+    description: 'Notes on projects and things I learn.',
+    intro: 'A place to share ideas, experiments, and lessons.',
   },
-
   projects: [
     {
-      name: 'BetterBeaver',
-      url: 'https://betterbeaver.de',
-      image: 'betterbeaver.png',
-      imageAlt: 'BetterBeaver mascot, a beaver reading a wooden book',
-      summary: 'A spaced-repetition learning platform, designed, built and shipped on my own.',
-      points: [
-        'Offline-capable progressive web app: once a book is downloaded it works without a connection.',
-        'User accounts and data access on a PostgreSQL backend.',
-        'Automated tests, CI/CD, and architecture decisions written down in the repository rather than kept in my head.',
-      ],
-      stack: ['TypeScript', 'React', 'PWA', 'PostgreSQL', 'Vitest', 'GitHub Actions'],
+      name: 'Example project',
+      url: 'https://example.com',
+      image: '',
+      imageAlt: '',
+      summary: 'A short description of something you have built.',
+      points: ['Explain the problem it solves.', 'Describe what you learned while building it.'],
+      stack: ['TypeScript'],
     },
   ],
 };
